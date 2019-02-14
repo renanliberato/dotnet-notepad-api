@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using dotnet_notepad_api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_notepad_api
 {
@@ -26,6 +28,9 @@ namespace dotnet_notepad_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            var connection = "Server=notepad-stage1.database.windows.net;Database=notepad-stage1;User Id=renanliberato;Password=Mypass@01;";
+            services.AddDbContext<NotepadContext>
+                (options => options.UseSqlServer(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
