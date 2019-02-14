@@ -34,7 +34,7 @@ namespace dotnet_notepad_api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider provider)
         {
             if (env.IsDevelopment())
             {
@@ -44,6 +44,11 @@ namespace dotnet_notepad_api
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+
+            using (var context = provider.GetService<NotepadContext>())
+            {
+                context.Database.Migrate();
             }
 
             app.UseHttpsRedirection();
