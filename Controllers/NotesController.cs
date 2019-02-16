@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dotnet_notepad_api.Commands;
 using dotnet_notepad_api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -41,21 +42,31 @@ namespace dotnet_notepad_api.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<ActionResult<Note>> Post(Note note)
+        public async Task<ActionResult<Note>> Post([FromBody] CreateNoteCommand command)
         {
+            var note = Note.createNote(
+                command.Title,
+                command.Description
+            );
+
             context.Notes.Add(note);
             await context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(Get), new { id = note.Id }, note);
         }
 
-        // PUT api/values/5
+        // Put api/values/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Note note)
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateNoteCommand command)
         {
-            if (id != note.Id) {
-                return BadRequest();
+            var note = context.Notes.Find(id);
+
+            if (note == null) {
+                return NotFound();
             }
+
+            note.changeTitle(command.Title);
+            note.changeDescription(command.Description);
 
             context.Entry(note).State = EntityState.Modified;
             await context.SaveChangesAsync();
@@ -67,7 +78,9 @@ namespace dotnet_notepad_api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var note = await context.Notes.FindAsync(id);
+            var command = new DeleteNoteCommand(id);
+
+            var note = await context.Notes.FindAsync(command.Id);
 
             if (note == null)
             {
