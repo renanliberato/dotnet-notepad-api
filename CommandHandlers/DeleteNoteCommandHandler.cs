@@ -6,16 +6,16 @@ using MediatR;
 
 namespace dotnet_notepad_api.CommandHandlers
 {
-    public class DeleteNoteCommandHandler : IRequestHandler<DeleteNoteCommand, bool>
+    public class DeleteNoteHandler : IRequestHandler<DeleteNote, bool>
     {
         NotepadContext _context;
 
-        public DeleteNoteCommandHandler(NotepadContext context)
+        public DeleteNoteHandler(NotepadContext context)
         {
             _context = context;
         }
         
-        public async Task<bool> Handle(DeleteNoteCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteNote request, CancellationToken cancellationToken)
         {
             var note = _context.Notes.Find(request.Id);
 

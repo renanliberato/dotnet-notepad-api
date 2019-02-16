@@ -7,16 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_notepad_api.CommandHandlers
 {
-    public class UpdateNoteCommandHandler : IRequestHandler<UpdateNoteCommand, bool>
+    public class UpdateNoteHandler : IRequestHandler<UpdateNote, bool>
     {
         NotepadContext _context;
 
-        public UpdateNoteCommandHandler(NotepadContext context)
+        public UpdateNoteHandler(NotepadContext context)
         {
             _context = context;
         }
 
-        public async Task<bool> Handle(UpdateNoteCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateNote request, CancellationToken cancellationToken)
         {
             var note = _context.Notes.Find(request.Id);
 

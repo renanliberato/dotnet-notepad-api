@@ -2,11 +2,11 @@ using MediatR;
 
 namespace dotnet_notepad_api.Commands 
 {
-    public class DeleteNoteCommand : IRequest<bool>
+    public class DeleteNote : IRequest<bool>
     {
         public int Id { get; private set; }
 
-        public DeleteNoteCommand(
+        public DeleteNote(
             int Id
         )
         {

@@ -46,7 +46,7 @@ namespace dotnet_notepad_api.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<ActionResult<Note>> Post([FromBody] CreateNoteCommand command)
+        public async Task<ActionResult<Note>> Post([FromBody] CreateNote command)
         {
             var note = await _mediator.Send(command);
 
@@ -55,7 +55,7 @@ namespace dotnet_notepad_api.Controllers
 
         // Put api/values/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] UpdateNoteCommand command)
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateNote command)
         {
             var result = await _mediator.Send(command);
 
@@ -70,7 +70,7 @@ namespace dotnet_notepad_api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var command = new DeleteNoteCommand(id);
+            var command = new DeleteNote(id);
 
             var succeeded = await _mediator.Send(command);
 

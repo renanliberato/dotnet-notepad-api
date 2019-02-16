@@ -6,16 +6,16 @@ using MediatR;
 
 namespace dotnet_notepad_api.CommandHandlers
 {
-    public class CreateNoteCommandHandler : IRequestHandler<CreateNoteCommand, Note>
+    public class CreateNoteHandler : IRequestHandler<CreateNote, Note>
     {
         NotepadContext _context;
 
-        public CreateNoteCommandHandler(NotepadContext context)
+        public CreateNoteHandler(NotepadContext context)
         {
             _context = context;
         }
 
-        public async Task<Note> Handle(CreateNoteCommand request, CancellationToken cancellationToken)
+        public async Task<Note> Handle(CreateNote request, CancellationToken cancellationToken)
         {
             var note = Note.createNote(
                 request.Title,
