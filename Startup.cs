@@ -30,7 +30,11 @@ namespace dotnet_notepad_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            var connection = "Server=notepad-stage1.database.windows.net;Database=notepad-stage1;User Id=renanliberato;Password=Mypass@01;";
+            var dbHost = System.Environment.GetEnvironmentVariable("DB_HOST");
+            var dbName = System.Environment.GetEnvironmentVariable("DB_NAME");
+            var dbUser = System.Environment.GetEnvironmentVariable("DB_USER");
+            var dbPassword = System.Environment.GetEnvironmentVariable("DB_PASSWORD");
+            var connection = $"Server={dbHost};Database={dbName};User Id={dbUser};Password={dbPassword};";
             services.AddDbContext<NotepadContext>
                 (options => options.UseSqlServer(connection));
 
