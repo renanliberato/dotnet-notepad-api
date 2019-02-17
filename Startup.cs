@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using dotnet_notepad_api.Models;
 using Microsoft.EntityFrameworkCore;
+using MediatR.Pipeline;
+using MediatR;
 
 namespace dotnet_notepad_api
 {
@@ -31,6 +33,8 @@ namespace dotnet_notepad_api
             var connection = "Server=notepad-stage1.database.windows.net;Database=notepad-stage1;User Id=renanliberato;Password=Mypass@01;";
             services.AddDbContext<NotepadContext>
                 (options => options.UseSqlServer(connection));
+
+            services.AddMediatR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

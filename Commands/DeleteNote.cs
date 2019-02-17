@@ -1,10 +1,12 @@
+using MediatR;
+
 namespace dotnet_notepad_api.Commands 
 {
-    public class DeleteNoteCommand
+    public class DeleteNote : IRequest<bool>
     {
         public int Id { get; private set; }
 
-        public DeleteNoteCommand(
+        public DeleteNote(
             int Id
         )
         {
