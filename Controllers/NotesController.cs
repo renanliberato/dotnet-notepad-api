@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using dotnet_notepad_api.Commands;
+using dotnet_notepad_api.Events;
 using dotnet_notepad_api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,12 @@ namespace dotnet_notepad_api.Controllers
         {
             var note = await _mediator.Send(command);
 
+            await _mediator.Publish(new NoteCreated(
+                note.Id,
+                command.Title,
+                command.Description
+            ));
+
             return CreatedAtAction(nameof(Get), new { id = note.Id }, note);
         }
 
@@ -62,6 +69,12 @@ namespace dotnet_notepad_api.Controllers
             if (result == false) {
                 return NotFound();
             }
+
+            await _mediator.Publish(new NoteUpdated(
+                id,
+                command.Title,
+                command.Description
+            ));
 
             return NoContent();
         }
@@ -77,6 +90,10 @@ namespace dotnet_notepad_api.Controllers
             if (!succeeded) {
                 return NotFound();
             }
+
+            await _mediator.Publish(new NoteDeleted(
+                id
+            ));
 
             return NoContent();
         }
