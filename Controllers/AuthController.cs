@@ -53,6 +53,7 @@ namespace dotnet_notepad_api.Controllers
                 }
                 var claims = new[]
                 {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
