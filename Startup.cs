@@ -33,11 +33,14 @@ namespace dotnet_notepad_api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
+            var envSettings = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .Build();
+
+            services.Configure<AppSettings>(envSettings);
             services.AddScoped<SmtpClientFactory>();
 
-            var appSettings = appSettingsSection.Get<AppSettings>();
+            var appSettings = envSettings.Get<AppSettings>();
 
             var connection = $"Server={appSettings.DB_HOST};Database={appSettings.DB_NAME};User Id={appSettings.DB_USER};Password={appSettings.DB_PASSWORD};";
             services.AddDbContext<NotepadContext>
