@@ -16,6 +16,10 @@ using MediatR.Pipeline;
 using MediatR;
 using dotnet_notepad_api.Helpers;
 using dotnet_notepad_api.Services;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 
 namespace dotnet_notepad_api
 {
@@ -47,6 +51,24 @@ namespace dotnet_notepad_api
                 (options => options.UseSqlServer(connection));
 
             services.AddMediatR();
+
+            // auth
+            services.AddAuthentication().AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+                ValidIssuer = appSettings.JWT_ISSUER,
+                ValidAudience = appSettings.JWT_ISSUER,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.JWT_TOKEN))
+                };
+            });
+
+            services
+                .AddDefaultIdentity<User>()
+                .AddEntityFrameworkStores<NotepadContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

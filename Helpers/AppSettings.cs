@@ -9,5 +9,8 @@ namespace dotnet_notepad_api.Helpers
         public string SMTP_HOST { get; set; }
         public string SMTP_USER { get; set; }
         public string SMTP_PASSWORD { get; set; }
+
+        public string JWT_TOKEN {get; set; }
+        public string JWT_ISSUER {get; set; }
     }
 }

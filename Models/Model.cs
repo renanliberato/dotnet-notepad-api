@@ -10,5 +10,7 @@ namespace dotnet_notepad_api.Models
         { }
 
         public DbSet<Note> Notes { get; set; }
+
+        public DbSet<User> Users { get; set; }
     }
 }

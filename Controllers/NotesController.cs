@@ -6,11 +6,13 @@ using dotnet_notepad_api.Commands;
 using dotnet_notepad_api.Events;
 using dotnet_notepad_api.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_notepad_api.Controllers
 {
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/[controller]")]
     [ApiController]
     public class NotesController : ControllerBase
