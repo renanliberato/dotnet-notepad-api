@@ -14,6 +14,8 @@ using dotnet_notepad_api.Models;
 using Microsoft.EntityFrameworkCore;
 using MediatR.Pipeline;
 using MediatR;
+using dotnet_notepad_api.Helpers;
+using dotnet_notepad_api.Services;
 
 namespace dotnet_notepad_api
 {
@@ -30,11 +32,14 @@ namespace dotnet_notepad_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            var dbHost = System.Environment.GetEnvironmentVariable("DB_HOST");
-            var dbName = System.Environment.GetEnvironmentVariable("DB_NAME");
-            var dbUser = System.Environment.GetEnvironmentVariable("DB_USER");
-            var dbPassword = System.Environment.GetEnvironmentVariable("DB_PASSWORD");
-            var connection = $"Server={dbHost};Database={dbName};User Id={dbUser};Password={dbPassword};";
+
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            services.AddScoped<SmtpClientFactory>();
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+
+            var connection = $"Server={appSettings.DB_HOST};Database={appSettings.DB_NAME};User Id={appSettings.DB_USER};Password={appSettings.DB_PASSWORD};";
             services.AddDbContext<NotepadContext>
                 (options => options.UseSqlServer(connection));
 

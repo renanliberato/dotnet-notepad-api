@@ -3,25 +3,23 @@ using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
 using dotnet_notepad_api.Events;
+using dotnet_notepad_api.Services;
 using MediatR;
 
 namespace dotnet_notepad_api.EventHandlers
 {
     public class SendNoteUpdatedMail : INotificationHandler<NoteUpdated>
     {
+        private readonly SmtpClientFactory _smtpFactory;
+
+        public SendNoteUpdatedMail(SmtpClientFactory smtpFactory)
+        {
+            _smtpFactory = smtpFactory;
+        }
+
         public Task Handle(NoteUpdated notification, CancellationToken cancellationToken)
         {
-            SmtpClient client = new SmtpClient(
-                System.Environment.GetEnvironmentVariable("SMTP_HOST")
-            );
-            
-            client.Port = 2525;
-
-            client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential(
-                System.Environment.GetEnvironmentVariable("SMTP_USER"),
-                System.Environment.GetEnvironmentVariable("SMTP_PASSWORD")
-            );
+            SmtpClient client = _smtpFactory.build();
             
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("whoever@me.com");
