@@ -1,9 +1,9 @@
 using System.Net;
 using System.Net.Mail;
-using dotnet_notepad_api.Helpers;
+using WebAPI.Helpers;
 using Microsoft.Extensions.Options;
 
-namespace dotnet_notepad_api.Services
+namespace WebAPI.Services
 {
     public class SmtpClientFactory
     {

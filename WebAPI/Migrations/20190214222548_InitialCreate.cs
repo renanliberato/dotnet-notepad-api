@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace dotnet_notepad_api.Migrations
+namespace WebAPI.Migrations
 {
     public partial class InitialCreate : Migration
     {

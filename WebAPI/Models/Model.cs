@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
-namespace dotnet_notepad_api.Models
+namespace WebAPI.Models
 {
     public class NotepadContext : DbContext
     {

@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace dotnet_notepad_api.Commands 
+namespace WebAPI.Commands 
 {
     public class Register : IRequest<bool>
     {

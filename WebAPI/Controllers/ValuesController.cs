@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace dotnet_notepad_api.Controllers
+namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

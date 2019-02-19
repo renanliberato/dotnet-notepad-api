@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace dotnet_notepad_api.Models
+namespace WebAPI.Models
 {
     public class User : IdentityUser
     {

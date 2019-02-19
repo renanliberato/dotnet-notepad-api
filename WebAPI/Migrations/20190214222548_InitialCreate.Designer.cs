@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using dotnet_notepad_api.Models;
+using WebAPI.Models;
 
-namespace dotnet_notepad_api.Migrations
+namespace WebAPI.Migrations
 {
     [DbContext(typeof(NotepadContext))]
     [Migration("20190214222548_InitialCreate")]
@@ -20,7 +20,7 @@ namespace dotnet_notepad_api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("dotnet_notepad_api.Models.Note", b =>
+            modelBuilder.Entity("WebAPI.Models.Note", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

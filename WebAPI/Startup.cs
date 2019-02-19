@@ -10,18 +10,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using dotnet_notepad_api.Models;
+using WebAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using MediatR.Pipeline;
 using MediatR;
-using dotnet_notepad_api.Helpers;
-using dotnet_notepad_api.Services;
+using WebAPI.Helpers;
+using WebAPI.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 
-namespace dotnet_notepad_api
+namespace WebAPI
 {
     public class Startup
     {

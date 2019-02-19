@@ -1,4 +1,4 @@
-namespace dotnet_notepad_api.Helpers
+namespace WebAPI.Helpers
 {
     public class AppSettings
     {

@@ -1,11 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
-using dotnet_notepad_api.Commands;
-using dotnet_notepad_api.Models;
+using WebAPI.Commands;
+using WebAPI.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace dotnet_notepad_api.CommandHandlers
+namespace WebAPI.CommandHandlers
 {
     public class UpdateNoteHandler : IRequestHandler<UpdateNote, bool>
     {

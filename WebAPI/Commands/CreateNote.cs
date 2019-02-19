@@ -1,7 +1,7 @@
-using dotnet_notepad_api.Models;
+using WebAPI.Models;
 using MediatR;
 
-namespace dotnet_notepad_api.Commands 
+namespace WebAPI.Commands 
 {
     public class CreateNote : IRequest<Note>
     {

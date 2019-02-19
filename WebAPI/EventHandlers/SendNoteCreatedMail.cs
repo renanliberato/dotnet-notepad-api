@@ -2,11 +2,11 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
-using dotnet_notepad_api.Events;
-using dotnet_notepad_api.Services;
+using WebAPI.Events;
+using WebAPI.Services;
 using MediatR;
 
-namespace dotnet_notepad_api.EventHandlers
+namespace WebAPI.EventHandlers
 {
     public class SendNoteCreatedMail : INotificationHandler<NoteCreated>
     {

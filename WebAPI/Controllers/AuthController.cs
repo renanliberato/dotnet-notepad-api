@@ -5,10 +5,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using dotnet_notepad_api.Commands;
-using dotnet_notepad_api.Events;
-using dotnet_notepad_api.Helpers;
-using dotnet_notepad_api.Models;
+using WebAPI.Commands;
+using WebAPI.Events;
+using WebAPI.Helpers;
+using WebAPI.Models;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace dotnet_notepad_api.Controllers
+namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

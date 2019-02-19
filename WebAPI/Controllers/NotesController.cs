@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using dotnet_notepad_api.Commands;
-using dotnet_notepad_api.Events;
-using dotnet_notepad_api.Models;
+using WebAPI.Commands;
+using WebAPI.Events;
+using WebAPI.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace dotnet_notepad_api.Controllers
+namespace WebAPI.Controllers
 {
     [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/[controller]")]

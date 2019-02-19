@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace dotnet_notepad_api.Events
+namespace WebAPI.Events
 {
     public class NoteDeleted : INotification
     {
