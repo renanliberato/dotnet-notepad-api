@@ -9,6 +9,8 @@ namespace dotnet_notepad_api.Commands
         public string Title { get; private set; }
         public string Description { get; private set; }
 
+        public string UserId { get; set; }
+
         public UpdateNote(
             int Id,
             string Title,

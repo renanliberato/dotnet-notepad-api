@@ -7,6 +7,7 @@ namespace dotnet_notepad_api.Commands
     {
         public string Title { get; private set; }
         public string Description { get; private set; }
+        public User User { get; set; }
 
         public CreateNote(
             string Title,

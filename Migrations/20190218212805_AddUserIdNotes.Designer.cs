@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dotnet_notepad_api.Models;
 
 namespace dotnet_notepad_api.Migrations
 {
     [DbContext(typeof(NotepadContext))]
-    partial class NotepadContextModelSnapshot : ModelSnapshot
+    [Migration("20190218212805_AddUserIdNotes")]
+    partial class AddUserIdNotes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

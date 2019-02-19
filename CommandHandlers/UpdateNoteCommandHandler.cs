@@ -24,6 +24,10 @@ namespace dotnet_notepad_api.CommandHandlers
                 return false;
             }
 
+            if (note.User.Id != request.UserId) {
+                return false;
+            }
+
             note.changeTitle(request.Title);
             note.changeDescription(request.Description);
 

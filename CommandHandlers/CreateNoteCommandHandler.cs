@@ -19,7 +19,8 @@ namespace dotnet_notepad_api.CommandHandlers
         {
             var note = Note.createNote(
                 request.Title,
-                request.Description
+                request.Description,
+                request.User
             );
 
             _context.Notes.Add(note);

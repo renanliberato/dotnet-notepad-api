@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using dotnet_notepad_api.Commands;
 using dotnet_notepad_api.Events;
 using dotnet_notepad_api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,12 +22,15 @@ namespace dotnet_notepad_api.Controllers
     {
         private readonly IMediator _mediator;
 
-        private NotepadContext context;
+        private readonly NotepadContext context;
 
-        public NotesController(NotepadContext mContext, IMediator mediator)
+        private readonly UserManager<User> _userManager;
+
+        public NotesController(NotepadContext mContext, IMediator mediator, UserManager<User> userManager)
         {
             context = mContext;
             _mediator = mediator;
+            _userManager = userManager;
         }
 
         // GET api/values
@@ -51,6 +57,10 @@ namespace dotnet_notepad_api.Controllers
         [HttpPost]
         public async Task<ActionResult<Note>> Post([FromBody] CreateNote command)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            
+            command.User = user;
+
             var note = await _mediator.Send(command);
 
             await _mediator.Publish(new NoteCreated(
@@ -66,6 +76,10 @@ namespace dotnet_notepad_api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] UpdateNote command)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            command.UserId = user.Id;
+
             var result = await _mediator.Send(command);
 
             if (result == false) {
@@ -86,6 +100,10 @@ namespace dotnet_notepad_api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var command = new DeleteNote(id);
+
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            command.UserId = user.Id;
 
             var succeeded = await _mediator.Send(command);
 

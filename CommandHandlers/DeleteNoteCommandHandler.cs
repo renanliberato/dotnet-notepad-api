@@ -23,6 +23,10 @@ namespace dotnet_notepad_api.CommandHandlers
                 return false;
             }
 
+            if (note.User.Id != request.UserId) {
+                return false;
+            }
+
             _context.Notes.Remove(note);
             await _context.SaveChangesAsync();
 
