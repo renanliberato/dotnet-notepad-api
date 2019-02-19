@@ -18,13 +18,13 @@ namespace WebAPI.Tests.CommandHandlers
             var noteMock = new Mock<Note>();
             noteMock.Setup(obj => obj.changeTitle(It.IsAny<string>())).Verifiable();
             noteMock.Setup(obj => obj.changeDescription(It.IsAny<string>())).Verifiable();
-            noteMock.Setup(obj => obj.IsOwnedBy(It.IsAny<string>())).Returns(true);
+            noteMock.Setup(obj => obj.IsOwnedBy(It.IsAny<string>())).Returns(true).Verifiable();
 
             var notesRepo = new Mock<DbSet<Note>>();
-            notesRepo.Setup(obj => obj.Find(It.IsAny<int>())).Returns(noteMock.Object);
+            notesRepo.Setup(obj => obj.Find(It.IsAny<int>())).Returns(noteMock.Object).Verifiable();
 
             var context = new Mock<NotepadContext>(new DbContextOptions<NotepadContext>());
-            context.SetupGet(obj => obj.Notes).Returns(notesRepo.Object);
+            context.SetupGet(obj => obj.Notes).Returns(notesRepo.Object).Verifiable();
             context.Setup(obj => obj.MarkAsModified(It.IsAny<Note>())).Verifiable();
             context.Setup<Task<int>>(obj => obj.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
 
@@ -35,14 +35,9 @@ namespace WebAPI.Tests.CommandHandlers
 
             var result = await handler.Handle(command, new CancellationToken());
 
-            noteMock.Verify(obj => obj.changeTitle("mytitle"), Times.Once());
-            noteMock.Verify(obj => obj.changeDescription("mydescription"), Times.Once());
-            noteMock.Verify(obj => obj.IsOwnedBy(command.UserId), Times.Once());
-
-            notesRepo.Verify(obj => obj.Find(1), Times.Once());
-
-            context.Verify(obj => obj.MarkAsModified(noteMock.Object), Times.Once());
-            context.Verify(obj => obj.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
+            noteMock.Verify();
+            notesRepo.Verify();
+            context.Verify();
 
             Assert.True(result);
         }

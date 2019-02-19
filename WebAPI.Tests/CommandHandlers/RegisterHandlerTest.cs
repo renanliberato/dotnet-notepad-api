@@ -28,7 +28,7 @@ namespace WebAPI.Tests.CommandHandlers
 
             Assert.True(result);
             
-            manager.VerifyAll();
+            manager.Verify();
         }
     }
 }

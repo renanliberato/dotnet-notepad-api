@@ -29,10 +29,7 @@ namespace WebAPI.Tests.CommandHandlers
 
             await handler.Handle(noteEvent, new CancellationToken());
 
-            mailClient.Verify(
-                obj => obj.Send(It.IsAny<NoteCreatedMail>()),
-                Times.Once()
-            );
+            mailClient.Verify();
         }
     }
 }

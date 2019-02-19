@@ -18,8 +18,8 @@ namespace WebAPI.Tests.CommandHandlers
             notesRepo.Setup(obj => obj.Add(It.IsAny<Note>())).Verifiable();
 
             var context = new Mock<NotepadContext>(new DbContextOptions<NotepadContext>());
-            context.SetupGet(obj => obj.Notes).Returns(notesRepo.Object);
-            context.Setup<Task<int>>(obj => obj.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
+            context.SetupGet(obj => obj.Notes).Returns(notesRepo.Object).Verifiable();
+            context.Setup<Task<int>>(obj => obj.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1).Verifiable();
 
             var handler = new CreateNoteHandler(context.Object);
 
@@ -27,8 +27,8 @@ namespace WebAPI.Tests.CommandHandlers
 
             var result = await handler.Handle(command, new CancellationToken());
 
-            notesRepo.Verify(obj => obj.Add(It.IsAny<Note>()), Times.Once);
-            context.Verify(obj => obj.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
+            notesRepo.Verify();
+            context.Verify();
 
             Assert.Same(command.Title, result.Title);
             Assert.Same(command.Description, result.Description);
