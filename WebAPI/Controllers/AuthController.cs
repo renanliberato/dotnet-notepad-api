@@ -1,5 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -21,11 +22,11 @@ namespace WebAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> login([FromBody] Login command) 
         {
-            var token = await _mediator.Send(command);
+            var token = await _mediator.Send(command, new CancellationToken());
 
             if (token != null)
             {
-                return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+                return Ok(new LoginResponse(new JwtSecurityTokenHandler().WriteToken(token)));
             }
 
             return BadRequest("User not found");
@@ -43,6 +44,16 @@ namespace WebAPI.Controllers
             }
 
             return BadRequest("Error");
+        }
+    }
+
+    public class LoginResponse
+    {
+        public string token {get; set;}
+
+        public LoginResponse(string token)
+        {
+            this.token = token;
         }
     }
 }
