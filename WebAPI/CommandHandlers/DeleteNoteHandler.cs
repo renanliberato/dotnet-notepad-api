@@ -23,7 +23,7 @@ namespace WebAPI.CommandHandlers
                 return false;
             }
 
-            if (note.User.Id != request.UserId) {
+            if (!note.IsOwnedBy(request.UserId)) {
                 return false;
             }
 

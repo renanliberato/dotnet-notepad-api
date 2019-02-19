@@ -9,8 +9,13 @@ namespace WebAPI.Models
             : base(options)
         { }
 
-        public DbSet<Note> Notes { get; set; }
+        public virtual DbSet<Note> Notes { get; set; }
 
-        public DbSet<User> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+
+        public virtual void MarkAsModified(object entity)
+        {
+            Entry(entity).State = EntityState.Modified;
+        }
     }
 }

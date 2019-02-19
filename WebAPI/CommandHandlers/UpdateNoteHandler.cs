@@ -24,14 +24,14 @@ namespace WebAPI.CommandHandlers
                 return false;
             }
 
-            if (note.User.Id != request.UserId) {
+            if (!note.IsOwnedBy(request.UserId)) {
                 return false;
             }
 
             note.changeTitle(request.Title);
             note.changeDescription(request.Description);
 
-            _context.Entry(note).State = EntityState.Modified;
+            _context.MarkAsModified(note);
             await _context.SaveChangesAsync();
 
             return true;

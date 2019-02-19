@@ -25,12 +25,17 @@ namespace WebAPI.Models
             return note;
         }
 
-        public void changeTitle(string newTitle)
+        public virtual bool IsOwnedBy(string UserId)
+        {
+            return User.Id == UserId;
+        }
+
+        public virtual void changeTitle(string newTitle)
         {
             Title = newTitle;
         }
 
-        public void changeDescription(string newDescription)
+        public virtual void changeDescription(string newDescription)
         {
             Description = newDescription;
         }
