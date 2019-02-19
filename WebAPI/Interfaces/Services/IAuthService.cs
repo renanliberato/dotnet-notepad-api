@@ -5,6 +5,7 @@ namespace WebAPI.Services
 {
     public interface IAuthService
     {
+        Task<JwtSecurityToken> Login(string email, string password);
         Task<bool> Register(string email, string password);
     }
 }

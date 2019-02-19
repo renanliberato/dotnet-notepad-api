@@ -1,69 +1,24 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading;
 using System.Threading.Tasks;
-using WebAPI.Commands;
-using WebAPI.Models;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using System.IdentityModel.Tokens.Jwt;
-using WebAPI.Helpers;
-using Microsoft.Extensions.Options;
-using System.Security.Claims;
-using System;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using WebAPI.Commands;
+using WebAPI.Services;
 
 namespace WebAPI.CommandHandlers
 {
     public class LoginHandler : IRequestHandler<Login, JwtSecurityToken>
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
+        private readonly IAuthService _authService;
 
-        private readonly AppSettings _appSettings;
-
-        public LoginHandler(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            IOptions<AppSettings> appSettings)
+        public LoginHandler(IAuthService authService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _appSettings = appSettings.Value;
+            _authService = authService;
         }
 
         public async Task<JwtSecurityToken> Handle(Login request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
-
-            if (user != null)
-            {
-                var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-                
-                if (!result.Succeeded)
-                {
-                    return null;
-                }
-                var claims = new[]
-                {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_TOKEN));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                var token = new JwtSecurityToken(_appSettings.JWT_ISSUER,
-                _appSettings.JWT_ISSUER,
-                claims,
-                expires: DateTime.Now.AddDays(30),
-                signingCredentials: creds);
-
-                return token;
-            }
-
-            return null;
+            return await _authService.Login(request.Email, request.Password);
         }
     }
 }
