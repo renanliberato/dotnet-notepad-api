@@ -3,31 +3,24 @@ using System.Threading.Tasks;
 using WebAPI.Commands;
 using WebAPI.Models;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+using WebAPI.Services;
 
 namespace WebAPI.CommandHandlers
 {
     public class RegisterHandler : IRequestHandler<Register, bool>
     {
-        private readonly UserManager<User> _userManager;
+        private readonly IAuthService _authService;
 
-        public RegisterHandler(UserManager<User> userManager)
+        public RegisterHandler(IAuthService authService)
         {
-            _userManager = userManager;
+            _authService = authService;
         }
 
         public async Task<bool> Handle(Register request, CancellationToken cancellationToken)
         {
-            var user = new User {
-                UserName = request.Email,
-                Email = request.Email,
-                EmailConfirmed = true
-            };
-
-            var result = await _userManager.CreateAsync(user, request.Password);
+            var result = await _authService.Register(request.Email, request.Password);
             
-            return result.Succeeded;
+            return result;
         }
     }
 }

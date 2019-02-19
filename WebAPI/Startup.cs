@@ -44,6 +44,7 @@ namespace WebAPI
 
             services.Configure<AppSettings>(envSettings);
             services.AddScoped<IMailClient, MailClient>();
+            services.AddScoped<IAuthService, IdentityAuthService>();
 
             var appSettings = envSettings.Get<AppSettings>();
 
