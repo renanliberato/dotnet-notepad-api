@@ -10,39 +10,43 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace WebAPI.Tests.CommandHandlers
 {
-    public class DeleteNoteCommandHandlerTest
+    public class UpdateNoteHandlerTest
     {
         [Fact]
         public async void handlerShouldExecuteCorrectlyWhenExists()
         {
             var noteMock = new Mock<Note>();
+            noteMock.Setup(obj => obj.changeTitle(It.IsAny<string>())).Verifiable();
+            noteMock.Setup(obj => obj.changeDescription(It.IsAny<string>())).Verifiable();
             noteMock.Setup(obj => obj.IsOwnedBy(It.IsAny<string>())).Returns(true);
 
             var notesRepo = new Mock<DbSet<Note>>();
             notesRepo.Setup(obj => obj.Find(It.IsAny<int>())).Returns(noteMock.Object);
-            notesRepo.Setup(obj => obj.Remove(It.IsAny<Note>())).Verifiable();
 
             var context = new Mock<NotepadContext>(new DbContextOptions<NotepadContext>());
             context.SetupGet(obj => obj.Notes).Returns(notesRepo.Object);
-            context.Setup(obj => obj.Remove(It.IsAny<Note>())).Verifiable();
+            context.Setup(obj => obj.MarkAsModified(It.IsAny<Note>())).Verifiable();
             context.Setup<Task<int>>(obj => obj.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
 
-            var handler = new DeleteNoteHandler(context.Object);
+            var handler = new UpdateNoteHandler(context.Object);
 
-            var command = new DeleteNote(1);
+            var command = new UpdateNote(1, "mytitle", "mydescription");
             command.UserId = "myuserid";
 
             var result = await handler.Handle(command, new CancellationToken());
 
+            noteMock.Verify(obj => obj.changeTitle("mytitle"), Times.Once());
+            noteMock.Verify(obj => obj.changeDescription("mydescription"), Times.Once());
             noteMock.Verify(obj => obj.IsOwnedBy(command.UserId), Times.Once());
 
             notesRepo.Verify(obj => obj.Find(1), Times.Once());
 
-            notesRepo.Verify(obj => obj.Remove(noteMock.Object), Times.Once());
+            context.Verify(obj => obj.MarkAsModified(noteMock.Object), Times.Once());
             context.Verify(obj => obj.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once());
 
             Assert.True(result);
         }
+
         [Fact]
         public async void handlerShouldExecuteCorrectlyWhenNotExists()
         {
@@ -52,9 +56,9 @@ namespace WebAPI.Tests.CommandHandlers
             var context = new Mock<NotepadContext>(new DbContextOptions<NotepadContext>());
             context.SetupGet(obj => obj.Notes).Returns(notesRepo.Object);
 
-            var handler = new DeleteNoteHandler(context.Object);
+            var handler = new UpdateNoteHandler(context.Object);
 
-            var command = new DeleteNote(1);
+            var command = new UpdateNote(1, "mytitle", "mydescription");
             command.UserId = "myuserid";
 
             var result = await handler.Handle(command, new CancellationToken());
@@ -76,9 +80,9 @@ namespace WebAPI.Tests.CommandHandlers
             var context = new Mock<NotepadContext>(new DbContextOptions<NotepadContext>());
             context.SetupGet(obj => obj.Notes).Returns(notesRepo.Object);
 
-            var handler = new DeleteNoteHandler(context.Object);
+            var handler = new UpdateNoteHandler(context.Object);
 
-            var command = new DeleteNote(1);
+            var command = new UpdateNote(1, "mytitle", "mydescription");
             command.UserId = "myuserid";
 
             var result = await handler.Handle(command, new CancellationToken());
@@ -90,5 +94,4 @@ namespace WebAPI.Tests.CommandHandlers
             Assert.False(result);
         }
     }
-
 }

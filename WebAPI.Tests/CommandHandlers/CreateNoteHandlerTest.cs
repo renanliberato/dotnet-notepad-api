@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Tests.CommandHandlers
 {
-    public class CreateNoteCommandHandlerTest
+    public class CreateNoteHandlerTest
     {
         [Fact]
         public async void handlerShouldExecuteCorrectly()
