@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 using WebAPI.Commands;
 using WebAPI.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI.CommandHandlers
 {
     public class CreateNoteHandler : IRequestHandler<CreateNote, Note>
     {
-        NotepadContext _context;
+        private readonly NotepadContext _context;
 
         public CreateNoteHandler(NotepadContext context)
         {

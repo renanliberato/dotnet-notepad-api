@@ -9,7 +9,7 @@ namespace WebAPI.CommandHandlers
 {
     public class UpdateNoteHandler : IRequestHandler<UpdateNote, bool>
     {
-        NotepadContext _context;
+        private readonly NotepadContext _context;
 
         public UpdateNoteHandler(NotepadContext context)
         {
