@@ -43,5 +43,52 @@ namespace WebAPI.Tests.CommandHandlers
 
             Assert.True(result);
         }
+        [Fact]
+        public async void handlerShouldExecuteCorrectlyWhenNotExists()
+        {
+            var notesRepo = new Mock<DbSet<Note>>();
+            notesRepo.Setup(obj => obj.Find(It.IsAny<int>()));
+
+            var context = new Mock<NotepadContext>(new DbContextOptions<NotepadContext>());
+            context.SetupGet(obj => obj.Notes).Returns(notesRepo.Object);
+
+            var handler = new DeleteNoteHandler(context.Object);
+
+            var command = new DeleteNote(1);
+            command.UserId = "myuserid";
+
+            var result = await handler.Handle(command, new CancellationToken());
+
+            notesRepo.Verify(obj => obj.Find(1), Times.Once());
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async void handlerShouldExecuteCorrectlyWhenNotAuthorized()
+        {
+            var noteMock = new Mock<Note>();
+            noteMock.Setup(obj => obj.IsOwnedBy(It.IsAny<string>())).Returns(false);
+
+            var notesRepo = new Mock<DbSet<Note>>();
+            notesRepo.Setup(obj => obj.Find(It.IsAny<int>())).Returns(noteMock.Object);
+
+            var context = new Mock<NotepadContext>(new DbContextOptions<NotepadContext>());
+            context.SetupGet(obj => obj.Notes).Returns(notesRepo.Object);
+
+            var handler = new DeleteNoteHandler(context.Object);
+
+            var command = new DeleteNote(1);
+            command.UserId = "myuserid";
+
+            var result = await handler.Handle(command, new CancellationToken());
+
+            noteMock.Verify(obj => obj.IsOwnedBy(command.UserId), Times.Once());
+
+            notesRepo.Verify(obj => obj.Find(1), Times.Once());
+
+            Assert.False(result);
+        }
     }
+
 }
