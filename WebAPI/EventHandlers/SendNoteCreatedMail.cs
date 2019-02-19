@@ -5,28 +5,26 @@ using System.Threading.Tasks;
 using WebAPI.Events;
 using WebAPI.Services;
 using MediatR;
+using WebAPI.Mails;
+using WebAPI.Interfaces.Mails;
 
 namespace WebAPI.EventHandlers
 {
     public class SendNoteCreatedMail : INotificationHandler<NoteCreated>
     {
-        private readonly SmtpClientFactory _smtpFactory;
+        private readonly IMailClient _mailClient;
 
-        public SendNoteCreatedMail(SmtpClientFactory smtpFactory)
+        public SendNoteCreatedMail(IMailClient mailClient)
         {
-            _smtpFactory = smtpFactory;
+            _mailClient = mailClient;
         }
 
         public Task Handle(NoteCreated notification, CancellationToken cancellationToken)
         {
-            SmtpClient client = _smtpFactory.build();
-            
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("whoever@me.com");
-            mailMessage.To.Add("receiver@me.com");
-            mailMessage.Body = $"A new note was created:\n Title: {notification.Title} \n Description: {notification.Description}";
-            mailMessage.Subject = $"New note created: {notification.Title}";
-            client.Send(mailMessage);
+            _mailClient.Send(new NoteCreatedMail(
+                notification.Title,
+                notification.Description
+            ));
             
             return Task.FromResult(true);
         }

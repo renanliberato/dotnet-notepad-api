@@ -5,28 +5,25 @@ using System.Threading.Tasks;
 using WebAPI.Events;
 using WebAPI.Services;
 using MediatR;
+using WebAPI.Mails;
+using WebAPI.Interfaces.Mails;
 
 namespace WebAPI.EventHandlers
 {
     public class SendNoteDeletedMail : INotificationHandler<NoteDeleted>
     {
-        private readonly SmtpClientFactory _smtpFactory;
+        private readonly IMailClient _mailClient;
 
-        public SendNoteDeletedMail(SmtpClientFactory smtpFactory)
+        public SendNoteDeletedMail(IMailClient mailClient)
         {
-            _smtpFactory = smtpFactory;
+            _mailClient = mailClient;
         }
 
         public Task Handle(NoteDeleted notification, CancellationToken cancellationToken)
         {
-            SmtpClient client = _smtpFactory.build();
-            
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("whoever@me.com");
-            mailMessage.To.Add("receiver@me.com");
-            mailMessage.Body = $"A note was deleted:\n Id: {notification.Id}";
-            mailMessage.Subject = $"Note deleted: {notification.Id}";
-            client.Send(mailMessage);
+            _mailClient.Send(new NoteDeletedMail(
+                notification.Id
+            ));
             
             return Task.FromResult(true);
         }

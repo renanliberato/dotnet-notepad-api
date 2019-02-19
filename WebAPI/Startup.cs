@@ -20,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using WebAPI.Interfaces.Mails;
 
 namespace WebAPI
 {
@@ -42,7 +43,7 @@ namespace WebAPI
                 .Build();
 
             services.Configure<AppSettings>(envSettings);
-            services.AddScoped<SmtpClientFactory>();
+            services.AddScoped<IMailClient, MailClient>();
 
             var appSettings = envSettings.Get<AppSettings>();
 
