@@ -35,6 +35,7 @@ namespace WebAPI.Services
 
             if (user == null)
             {
+                System.Console.WriteLine($"user equal to null, {email}");
                 return null;
             }
             
@@ -42,6 +43,7 @@ namespace WebAPI.Services
             
             if (!result.Succeeded)
             {
+                System.Console.WriteLine($"signin not succeeded, {result.IsNotAllowed}");
                 return null;
             }
 
@@ -68,7 +70,7 @@ namespace WebAPI.Services
         {
             var user = new User {
                 UserName = email,
-                Email = password,
+                Email = email,
                 EmailConfirmed = true
             };
 

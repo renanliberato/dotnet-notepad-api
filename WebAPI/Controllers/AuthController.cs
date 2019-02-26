@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Commands;
+using WebAPI.Services;
 
 namespace WebAPI.Controllers
 {
@@ -12,17 +13,17 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IAuthService _service;
 
-        public AuthController(IMediator mediator)
+        public AuthController(IAuthService service)
         {
-            _mediator = mediator;
+            _service = service;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> login([FromBody] Login command) 
         {
-            var token = await _mediator.Send(command, new CancellationToken());
+            var token = await _service.Login(command.Email, command.Password);
 
             if (token != null)
             {
@@ -36,7 +37,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> register([FromBody] Register command) 
         {
 
-            var succeeded = await _mediator.Send(command);
+            var succeeded = await _service.Register(command.Email, command.Password);
 
             if (succeeded)
             {
