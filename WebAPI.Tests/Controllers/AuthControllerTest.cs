@@ -1,10 +1,7 @@
 using System.Threading;
 using Moq;
-using WebAPI.Models;
-using WebAPI.CommandHandlers;
 using Xunit;
 using WebAPI.Commands;
-using System.Threading.Tasks;
 using WebAPI.Services;
 using System.IdentityModel.Tokens.Jwt;
 using MediatR;
@@ -16,17 +13,17 @@ namespace WebAPI.Tests.Controllers
     public class AuthControllerTest
     {
         [Fact]
-        public async void loginShouldExecuteCorrectlyWhenUserExists()
+        public async void LoginShouldExecuteCorrectlyWhenUserExists()
         {
             var token = new JwtSecurityToken();
 
-            var mediator = new Mock<IMediator>();
-            mediator.Setup(obj => obj.Send(
-                It.Is<Login>(it => it.Email == "myemail" && it.Password == "mypassword"),
-                It.IsAny<CancellationToken>()
+            var service = new Mock<IAuthService>();
+            service.Setup(obj => obj.Login(
+                It.Is<string>(it => it == "myemail"),
+                It.Is<string>(it => it == "mypassword")
             )).ReturnsAsync(token).Verifiable();
 
-            var controller = new AuthController(mediator.Object);
+            var controller = new AuthController(service.Object);
 
             var command = new Login("myemail", "mypassword");
 
@@ -38,21 +35,21 @@ namespace WebAPI.Tests.Controllers
             Assert.Equal(200, result.StatusCode);
             Assert.Equal(expectedResultToken, loginResponse.token);
             
-            mediator.Verify();
+            service.Verify();
         }
 
         [Fact]
-        public async void loginShouldExecuteCorrectlyWhenUserNotExists()
+        public async void LoginShouldExecuteCorrectlyWhenUserNotExists()
         {
             JwtSecurityToken token = null;
             
-            var mediator = new Mock<IMediator>();
-            mediator.Setup(obj => obj.Send(
-                It.Is<Login>(it => it.Email == "myemail" && it.Password == "mypassword"),
-                It.IsAny<CancellationToken>()
+            var service = new Mock<IAuthService>();
+            service.Setup(obj => obj.Login(
+                It.Is<string>(it => it == "myemail"),
+                It.Is<string>(it => it == "mypassword")
             )).ReturnsAsync(token).Verifiable();
 
-            var controller = new AuthController(mediator.Object);
+            var controller = new AuthController(service.Object);
 
             var command = new Login("myemail", "mypassword");
 
@@ -60,19 +57,19 @@ namespace WebAPI.Tests.Controllers
 
             Assert.Equal(400, result.StatusCode);
             
-            mediator.Verify();
+            service.Verify();
         }
 
         [Fact]
-        public async void registerShouldExecuteCorrectlyWhenServiceSucceed()
+        public async void RegisterShouldExecuteCorrectlyWhenServiceSucceed()
         {
-            var mediator = new Mock<IMediator>();
-            mediator.Setup(obj => obj.Send(
-                It.Is<Register>(it => it.Email == "myemail" && it.Password == "mypassword"),
-                It.IsAny<CancellationToken>()
+            var service = new Mock<IAuthService>();
+            service.Setup(obj => obj.Register(
+                It.Is<string>(it => it == "myemail"),
+                It.Is<string>(it => it == "mypassword")
             )).ReturnsAsync(true).Verifiable();
 
-            var controller = new AuthController(mediator.Object);
+            var controller = new AuthController(service.Object);
 
             var command = new Register("myemail", "mypassword");
 
@@ -80,16 +77,16 @@ namespace WebAPI.Tests.Controllers
 
             Assert.Equal(200, result.StatusCode);
             
-            mediator.Verify();
+            service.Verify();
         }
 
         [Fact]
-        public async void registerShouldExecuteCorrectlyWhenServiceFails()
+        public async void RegisterShouldExecuteCorrectlyWhenServiceFails()
         {
-            var mediator = new Mock<IMediator>();
-            mediator.Setup(obj => obj.Send(
-                It.Is<Register>(it => it.Email == "myemail" && it.Password == "mypassword"),
-                It.IsAny<CancellationToken>()
+            var mediator = new Mock<IAuthService>();
+            mediator.Setup(obj => obj.Register(
+                It.Is<string>(it => it == "myemail"),
+                It.Is<string>(it => it == "mypassword")
             )).ReturnsAsync(false).Verifiable();
 
             var controller = new AuthController(mediator.Object);
