@@ -9,9 +9,8 @@ Práticas a serem implementadas:
 - [X] Events / EventHandlers
 - [X] CI / CD utilizando Azure Devops
   - [Esse artigo](https://docs.microsoft.com/en-us/azure/devops/pipelines/languages/dotnet-core?view=azure-devops&tabs=yaml) me ajudou MUITO
-  - https://notepad-api-stage1.azurewebsites.net/api/notes
-- [ ] Autenticação por token JWT
-- [ ] Testes (unitários, integração)
+- [X] Autenticação por token JWT
+- [X] Testes unitários
 
 Pacotes utilizados:
 - [MediatR](https://github.com/jbogard/MediatR)
